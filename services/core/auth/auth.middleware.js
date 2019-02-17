@@ -24,5 +24,19 @@ module.exports = (server) => {
 		}
 	});
 
+	router.post('/auth/userinfo', (req, res, next) => {
+		let users = server.db.getState().users,
+			matchedUser = users.find((user) => {
+				console.log(user);
+				return user.fakeToken === req.header('Authorization');
+			});
+
+		if(!matchedUser) {
+			res.status(401).send('Unauthorized');
+		} else {
+			res.json(matchedUser);
+		}
+	});
+
 	return router;
 };
